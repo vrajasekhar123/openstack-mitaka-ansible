@@ -1,0 +1,9 @@
+---
+  - name: Install openstack-dashboard in controller node
+    apt: name={{ item }} state=present force=yes
+    with_items:
+     - openstack-dashboard
+  - name: Configure local_settings.py
+    template: src=local_settings.py.j2 dest=/etc/openstack-dashboard/local_settings.py
+  - name: Restart Apache2
+    service: name=apache2 state=reloaded

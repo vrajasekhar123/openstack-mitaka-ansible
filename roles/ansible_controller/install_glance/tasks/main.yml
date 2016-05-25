@@ -1,0 +1,211 @@
+---
+  - name: Create database for glance
+    mysql_db: login_user=root login_password={{ mysql_root_password  }} name=glance state=present
+  - name: Create glance user and grant privileges to glance database.
+    mysql_user: login_user=root login_password={{ mysql_root_password  }} name=glance password={{ glance_dbpass }} priv=*.*:ALL state=present host={{ item }}
+    with_items:
+     - "{{ controller_eth1 }}"
+     - 127.0.0.1
+     - localhost
+     - ::1
+  - name: Install glance and python-glanceclient on controller node
+    apt: name={{ item }} state=present force=yes
+    with_items:
+     - glance
+  - name: update /etc/glance/glance-api.conf
+    lineinfile: dest=/etc/glance/glance-api.conf regexp='^sqlite_db' state=absent
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=database
+              option=connection
+              value=mysql+pymysql://glance:{{ glance_dbpass }}@{{ controller_eth1 }}/glance
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              state=absent
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              state=present
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              option=auth_uri
+              value=http://{{ controller_eth1 }}:5000
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              option=auth_url
+              value=http://{{ controller_eth1 }}:35357
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              option=memcached_servers
+              value={{ controller_eth1 }}:11211
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              option=auth_type
+              value=password
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              option=project_domain_name
+              value=default
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              option=user_domain_name
+              value=default
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              option=project_name
+              value=service
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              option=username
+              value=glance
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=keystone_authtoken
+              option=password
+              value={{ glance_user_pass }}
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=paste_deploy
+              option=flavor
+              value=keystone
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=glance_store
+              option=stores
+              value=file,http
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=glance_store
+              option=default_store
+              value=file
+              backup=yes
+  - name: update /etc/glance/glance-api.conf
+    ini_file: dest=/etc/glance/glance-api.conf
+              section=glance_store
+              option=filesystem_store_datadir
+              value=/var/lib/glance/images/
+              backup=yes
+
+  - name: update /etc/glance/glance-registry.conf
+    lineinfile: dest=/etc/glance/glance-registry.conf regexp='^sqlite_db' state=absent
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=database
+              option=connection
+              value=mysql+pymysql://glance:{{ glance_dbpass }}@{{ controller_eth1 }}/glance
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              state=absent
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              state=present
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              option=auth_uri
+              value=http://{{ controller_eth1 }}:5000
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              option=auth_url
+              value=http://{{ controller_eth1 }}:35357
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              option=memcached_servers
+              value={{ controller_eth1 }}:11211
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              option=auth_type
+              value=password
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              option=project_domain_name
+              value=default
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              option=user_domain_name
+              value=default
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              option=project_name
+              value=service
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              option=username
+              value=glance
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=keystone_authtoken
+              option=password
+              value={{ glance_user_pass }}
+              backup=yes
+  - name: update /etc/glance/glance-registry.conf
+    ini_file: dest=/etc/glance/glance-registry.conf
+              section=paste_deploy
+              option=flavor
+              value=keystone
+              backup=yes
+
+  - name: Populate the Image service database in controller node
+    shell: su -s /bin/sh -c "glance-manage db_sync" glance
+  - name: Restart Glance-Registry
+    service: name=glance-registry state=restarted
+  - name: Restart Glance-Api
+    service: name=glance-api state=restarted
+  - name: Remove /var/lib/glance/glance.sqlite
+    file: path=/var/lib/glance/glance.sqlite state=absent
+  - name: Upload image
+    template: src=image.sh.j2 dest=/var/tmp/image.sh
+  - name: create image
+    shell: bash /var/tmp/image.sh chdir=/var/tmp/
+    environment:
+      OS_PROJECT_DOMAIN_NAME: default
+      OS_USER_DOMAIN_NAME: default
+      OS_PROJECT_NAME: admin
+      OS_USERNAME: admin
+      OS_PASSWORD: "{{ admin_user_pass }}"
+      OS_AUTH_URL: http://{{ controller_eth1 }}:35357/v3
+      OS_IDENTITY_API_VERSION: 3
+      OS_IMAGE_API_VERSION: 2

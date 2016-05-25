@@ -1,0 +1,12 @@
+---
+- hosts: ansible_openstack_mitaka
+  tasks:
+  - name: Enable the OpenStack repository
+    apt: name=software-properties-common state=present
+  - name: Update the repo file
+    lineinfile: dest=/etc/apt/sources.list.d/cloudarchive-mitaka.list line="deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/mitaka main" create=yes
+  - lineinfile: dest=/etc/apt/sources.list.d/cloudarchive-mitaka.list line="# deb-src http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/mitaka main" create=yes
+  - name: Upgrade the packages
+    apt: update_cache=yes upgrade=dist force=yes
+  - name: Install the OpenStack client
+    apt: name=python-openstackclient update_cache=yes state=present force=yes

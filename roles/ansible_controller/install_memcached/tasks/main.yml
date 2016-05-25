@@ -1,0 +1,10 @@
+---
+  - name: Install memcached python-memcache in controller node
+    apt: name={{ item }} state=present force=yes
+    with_items:
+     - memcached
+     - python-memcache
+  - name: update /etc/memcached.conf file
+    lineinfile: dest=/etc/memcached.conf line="-l {{ controller_eth1 }}" regexp="^-l 127.0.0.1"
+  - name: Restart Memcached
+    service: name=memcached state=restarted

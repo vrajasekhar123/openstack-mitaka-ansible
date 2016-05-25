@@ -1,0 +1,45 @@
+---
+  - name: Update nameserver
+    lineinfile: dest=/etc/resolv.conf line="nameserver 8.8.8.8"
+  - name: Install mariadb-server python-pymysql in controller node
+    apt: name={{ item }} state=present force=yes
+    with_items:
+     - mariadb-server
+     - python-pymysql
+     - python-mysqldb
+  - name: changing /etc/mysql/conf.d/openstack.cnf
+    ini_file: dest=/etc/mysql/conf.d/openstack.cnf
+              section=mysqld
+              option=bind-address
+              value={{ controller_eth1 }}
+              backup=yes
+  - name: changing /etc/mysql/conf.d/openstack.cnf
+    ini_file: dest=/etc/mysql/conf.d/openstack.cnf
+              section=mysqld
+              option=default-storage-engine
+              value=innodb
+              backup=yes
+  - name: changing /etc/mysql/conf.d/openstack.cnf
+    ini_file: dest=/etc/mysql/conf.d/openstack.cnf
+              section=mysqld
+              option=innodb_file_per_table
+              value=
+              backup=yes
+  - name: changing /etc/mysql/conf.d/openstack.cnf
+    ini_file: dest=/etc/mysql/conf.d/openstack.cnf
+              section=mysqld
+              option=collation-server
+              value=utf8_general_ci
+              backup=yes
+  - name: changing /etc/mysql/conf.d/openstack.cnf
+    ini_file: dest=/etc/mysql/conf.d/openstack.cnf
+              section=mysqld
+              option=character-set-server
+              value=utf8
+              backup=yes
+  - name: Copy python script to change the root password
+    copy: src=../../change_mysql_root_password.py dest=/var/tmp/change_mysql_root_password.py owner=root group=root mode=755
+  - name: Change root user password
+    command: /usr/bin/python /var/tmp/change_mysql_root_password.py "{{ mysql_root_password }}"
+  - name: Restart MySQL
+    service: name=mysql state=restarted

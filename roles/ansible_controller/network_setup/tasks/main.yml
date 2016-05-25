@@ -1,0 +1,6 @@
+---
+  - name: Create demo-openrc.sh file
+    template: src=demo-openrc.sh.j2 dest=/root/demo-openrc.sh
+  - name: Create tenant network 
+    template: src=network.sh.j2 dest=/var/tmp/network.sh
+  - shell: bash /var/tmp/network.sh 

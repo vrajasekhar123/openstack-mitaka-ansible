@@ -1,0 +1,194 @@
+---
+  - name: Install neutron-linuxbridge-agent on compute node
+    apt: name=neutron-linuxbridge-agent state=present force=yes
+  - name: Configure DEFAULT section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=DEFAULT
+              option=rpc_backend
+              value=rabbit
+              backup=yes
+  - name: Configure oslo_messaging_rabbit section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=oslo_messaging_rabbit
+              option=rabbit_host
+              value={{ controller_eth1 }}
+              backup=yes
+  - name: Configure oslo_messaging_rabbit section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=oslo_messaging_rabbit
+              option=rabbit_userid
+              value=openstack
+              backup=yes
+  - name: Configure oslo_messaging_rabbit section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=oslo_messaging_rabbit
+              option=rabbit_password
+              value={{ rabbit_pass }}
+              backup=yes
+  - name: Configure DEFAULT section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=DEFAULT
+              option=auth_strategy
+              value=keystone
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              state=absent
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              state=present
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              option=auth_uri
+              value=http://{{ controller_eth1 }}:5000
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              option=auth_url
+              value=http://{{ controller_eth1 }}:35357
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              option=memcached_servers
+              value={{ controller_eth1 }}:11211
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              option=auth_type
+              value=password
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              option=project_domain_name
+              value=default
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              option=user_domain_name
+              value=default
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              option=project_name
+              value=service
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              option=username
+              value=neutron
+              backup=yes
+  - name: Configure keystone_authtoken section in /etc/neutron/neutron.conf
+    ini_file: dest=/etc/neutron/neutron.conf
+              section=keystone_authtoken
+              option=password
+              value={{ neutron_user_pass }}
+              backup=yes
+
+  - name: Configure linux_bridge section in /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    ini_file: dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
+              section=linux_bridge
+              option=physical_interface_mappings
+              value=provider:eth2
+              backup=yes
+  - name: Configure vxlan section in /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    ini_file: dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
+              section=vxlan
+              option=enable_vxlan
+              value=True
+              backup=yes
+  - name: Configure vxlan section in /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    ini_file: dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
+              section=vxlan
+              option=local_ip
+              value={{ compute_eth1 }}
+              backup=yes
+  - name: Configure vxlan section in /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    ini_file: dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
+              section=vxlan
+              option=l2_population
+              value=True
+              backup=yes
+  - name: Configure securitygroup section in /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    ini_file: dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
+              section=securitygroup
+              option=enable_security_group
+              value=True
+              backup=yes
+  - name: Configure vxlan section in /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    ini_file: dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
+              section=securitygroup
+              option=firewall_driver
+              value=neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+              backup=yes
+  - name: Configure neutron section in /etc/nova/nova.conf
+    ini_file: dest=/etc/nova/nova.conf
+              section=neutron
+              option=url
+              value=http://{{ controller_eth1 }}:9696
+              backup=yes
+  - name: Configure neutron section in /etc/nova/nova.conf
+    ini_file: dest=/etc/nova/nova.conf
+              section=neutron
+              option=auth_url
+              value=http://{{ controller_eth1 }}:35357
+              backup=yes
+  - name: Configure neutron section in /etc/nova/nova.conf
+    ini_file: dest=/etc/nova/nova.conf
+              section=neutron
+              option=auth_type
+              value=password
+              backup=yes
+  - name: Configure neutron section in /etc/nova/nova.conf
+    ini_file: dest=/etc/nova/nova.conf
+              section=neutron
+              option=project_domain_name
+              value=default
+              backup=yes
+  - name: Configure neutron section in /etc/nova/nova.conf
+    ini_file: dest=/etc/nova/nova.conf
+              section=neutron
+              option=user_domain_name
+              value=default
+              backup=yes
+  - name: Configure neutron section in /etc/nova/nova.conf
+    ini_file: dest=/etc/nova/nova.conf
+              section=neutron
+              option=region_name
+              value=RegionOne
+              backup=yes
+  - name: Configure neutron section in /etc/nova/nova.conf
+    ini_file: dest=/etc/nova/nova.conf
+              section=neutron
+              option=project_name
+              value=service
+              backup=yes
+  - name: Configure neutron section in /etc/nova/nova.conf
+    ini_file: dest=/etc/nova/nova.conf
+              section=neutron
+              option=username
+              value=neutron
+              backup=yes
+  - name: Configure neutron section in /etc/nova/nova.conf
+    ini_file: dest=/etc/nova/nova.conf
+              section=neutron
+              option=password
+              value={{ neutron_user_pass }}
+              backup=yes
+
+  - name: Restart Nova-compute
+    service: name=nova-compute state=restarted
+  - name: Restart Neutron-linuxbridge-agent
+    service: name=neutron-linuxbridge-agent state=restarted
+

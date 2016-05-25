@@ -1,0 +1,10 @@
+---
+#  - name: Install rabbitmq-server in controller node
+#    apt: name=rabbitmq-server state=present force=yes
+  - name: Change password for openstack user of rabbitMQ
+    rabbitmq_user: user=openstack password={{ rabbit_pass }} vhost=/ state=present
+#    command: rabbitmqctl add_user openstack "{{ rabbit_pass }}"
+  - name: Set privilege for openstack user
+    command: rabbitmqctl set_permissions openstack  ".*" ".*" ".*"
+  - name: Restart RabbitMQ
+    service: name=rabbitmq-server state=restarted

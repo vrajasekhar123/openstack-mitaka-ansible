@@ -1,0 +1,21 @@
+---
+- hosts: ansible_openstack_mitaka
+  tasks:
+  - name: install chrony
+    apt: pkg=chrony state=installed
+- vars_files:
+  - group_vars/all
+  hosts: "{{ controller_eth1 }}"
+  tasks:
+  - name: change conf
+    lineinfile: dest=/etc/chrony/chrony.conf regexp='^server 0' line='#server 0.debian.pool.ntp.org offline minpoll 8'
+  - name: change conf
+    lineinfile: dest=/etc/chrony/chrony.conf regexp='^server 1' line='#server 1.debian.pool.ntp.org offline minpoll 8'
+  - lineinfile: dest=/etc/chrony/chrony.conf regexp='^server 2' line='#server 2.debian.pool.ntp.org offline minpoll 8'
+  - lineinfile: dest=/etc/chrony/chrony.conf regexp='^server 3' line='#server 3.debian.pool.ntp.org offline minpoll 8'
+- hosts: ansible_openstack_mitaka
+  tasks:
+  - name: change conf in all nodes
+    lineinfile: dest=/etc/chrony/chrony.conf line='server {{ controller_eth1 }} iburst'
+  - name: Restart chrony
+    service: name=chrony state=restarted

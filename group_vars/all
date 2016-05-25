@@ -1,0 +1,23 @@
+---
+controller_eth1: 10.0.0.80
+controller_eth2: 10.0.0.81
+#controller_eth3: 10.0.0.82
+compute_eth1: 10.0.0.83
+compute_eth2: 10.0.0.84
+#compute_eth3: 10.0.0.85
+mysql_root_password: root
+rabbit_pass: pass
+openssl_rand: 1a2b3c4d5e
+admin_token: http://{{ controller_eth1 }}:35357/v3 
+keystone_dbpass: pass
+admin_user_pass: pass
+demo_user_pass: pass
+glance_dbpass: pass
+glance_user_pass: pass
+nova_dbpass: pass
+nova_user_pass: pass
+neutron_dbpass: pass
+neutron_user_pass: pass
+cinder_dbpass: pass
+cinder_user_pass: pass
+metadata_pass: pass

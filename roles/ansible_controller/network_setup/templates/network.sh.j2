@@ -1,0 +1,12 @@
+#!/bin/bash
+openstack flavor create --id 0 --vcpus 1 --ram 64 --disk 1 m1.nano
+. /root/demo-openrc.sh
+echo -e  'y\n'|ssh-keygen -q -t rsa -N "" -f /root/.ssh/id_rsa
+openstack keypair create --public-key /root/.ssh/id_rsa.pub mykey
+openstack security group rule create --proto icmp default
+openstack security group rule create --proto tcp --dst-port 22 default
+
+neutron net-create selfservice
+neutron subnet-create --name selfservice --dns-nameserver 8.8.4.4 --gateway 172.16.1.1 selfservice 172.16.1.0/24
+neutron router-create router
+neutron router-interface-add router selfservice

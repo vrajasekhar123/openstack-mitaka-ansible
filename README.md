@@ -12,7 +12,8 @@ All 2 VMs should communicate with each other and with ansible node.
 
 #How to use :-
 Copy the attached to your ansible node and untar the same.
-Here you have to edit the 2 basic files.                     i. inventory/hosts :- Host file to ansible 
+Here you have to edit the 2 basic files.                     
+i. inventory/hosts :- Host file to ansible 
 ii. group_vars/all:- Var file to define IPs, user names and passwords.
 And you can simple install the OpenStack with single command from openstack_main.yml file location.
 

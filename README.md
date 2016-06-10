@@ -20,7 +20,9 @@ All 2 VMs should communicate with each other and with ansible node.
   cp - rp openstack-mitaka-ansible /usr/local/
   
   (or)
+  
   unzip ~/Downloads/openstack-mitaka-ansible-master.zip
+  
   cp -rp openstack-mitaka-ansible-master /usr/local/
    
 . Goto /usr/local/openstack-mitaka-ansible/

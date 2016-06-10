@@ -12,14 +12,23 @@ All 2 VMs should communicate with each other and with ansible node.
 
 #How to use :-
 . Copy the attached tar file to any of the location. Suppose, /usr/local/
+
 . Untar the file.
+
    cd /usr/local/
+   
    tar -xvf openstack-mitaka01.tar
+   
 . Goto /usr/local/openstack-mitaka01/
+
    cd /usr/local/openstack-mitaka01/
+   
 . And edit the below two file.
+
 i. inventory/hosts :- Host file to ansible. Define the controller and compute IPs here.
+
 ii. group_vars/all:- Define IPs, user names and passwords. 
+
 And you can simply install the OpenStack with single command from openstack_main.yml file location.
 
 #command:-

@@ -1,10 +1,8 @@
 ---
 controller_eth1: 10.0.0.80
 controller_eth2: 10.0.0.81
-#controller_eth3: 10.0.0.82
 compute_eth1: 10.0.0.83
 compute_eth2: 10.0.0.84
-#compute_eth3: 10.0.0.85
 mysql_root_password: root
 rabbit_pass: pass
 openssl_rand: 1a2b3c4d5e

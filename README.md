@@ -11,17 +11,19 @@ ii. VM2(Compute) - Hard disk 50GB, RAM 2 GB, 2 CPU, Interfaces 3 (1 NAT, 2 Host 
 All 2 VMs should communicate with each other and with ansible node.
 
 #How to use :-
-. Copy the attached tar file to any of the location. Suppose, /usr/local/
+. Clone the blove code.
+  git clone 
+. Copy the downloaded code to any of the location. Suppose, /usr/local/
 
 . Untar the file.
 
    cd /usr/local/
    
-   tar -xvf openstack-mitaka01.tar
+   tar -xvf openstack-mitaka-ansible-master.zip
    
-. Goto /usr/local/openstack-mitaka01/
+. Goto /usr/local/openstack-mitaka-ansible-master/
 
-   cd /usr/local/openstack-mitaka01/
+   cd /usr/local/openstack-mitaka-master/
    
 . And edit the below two file.
 

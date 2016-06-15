@@ -8,7 +8,7 @@ i. VM1(Controller) - Hard disk 50GB, RAM 4 GB, 1 CPU, Interfaces 3 ( 2 Host only
 
 ii. VM2(Compute) - Hard disk 50GB, RAM 2 GB, 2 CPU, Interfaces 3 ( 2 Host only adapter vboxnet0, 1 NAT )
 
-Inside of code, we are using the only 2 interfaces. Here we are using NAT for internet connectivity purpose.
+Inside of code, we are using the only 2 interfaces(Host only). Here we are using NAT for internet connectivity purpose.
 
 All 2 VMs should communicate with each other and with ansible node.
 
